@@ -1,6 +1,6 @@
 package com.ghsong.studymeeting.account;
 
-import com.ghsong.studymeeting.ConsoleMailSender;
+import com.ghsong.studymeeting.mail.ConsoleMailSender;
 import com.ghsong.studymeeting.domain.Account;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,7 +9,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -76,7 +75,7 @@ class AccountControllerTest {
         Account account = accountRepository.findByEmail("song6497@gmail.com");
         assertNotNull(account);
         assertNotEquals(account.getPassword(), "12345678");
-        assertTrue(accountRepository.existsByEmail("song6497@gmail.com"));
+        assertNotNull(account.getEmailCheckToken());
         then(javaMailSender).should().send(any(SimpleMailMessage.class));
     }
 
