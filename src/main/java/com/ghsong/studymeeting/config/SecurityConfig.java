@@ -31,7 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         // static 경로의 파일은 security 적용 X
         web.ignoring()
-                .mvcMatchers("/node-modules/**")
+                .mvcMatchers("/node_modules/**")
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
 }
