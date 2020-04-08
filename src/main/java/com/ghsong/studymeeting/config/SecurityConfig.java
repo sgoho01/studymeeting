@@ -20,8 +20,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .mvcMatchers("/", "/login", "sign-up", "check-email", "check-email-token",
-                        "email-login", "check-email-login", "login-link").permitAll()
+                .mvcMatchers("/", "/login", "/sign-up", "/check-email", "/check-email-token",
+                        "/email-login", "/check-email-login", "/login-link").permitAll()
                 .mvcMatchers(HttpMethod.GET, "/profile/*").permitAll()
                 .anyRequest().authenticated();
     }
@@ -31,6 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         // static 경로의 파일은 security 적용 X
         web.ignoring()
+                .mvcMatchers("/node-modules/**")
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
 }
