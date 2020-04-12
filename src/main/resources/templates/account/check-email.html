@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments.html :: head"></head>
+<body class="bg-light">
+    <div th:replace="fragments.html :: main-nav"></div>
+
+    <div class="py-5 text-center">
+        <p class="lead">스터디미팅 이메일 확인</p>
+        <h2>
+            이메일에서 인증을 해주세요.
+        </h2>
+        <small class="text-info">
+            <a href="#" th:href="@{/resend-email-token(account=${account})}">
+                이메일 인증 재발송
+            </a>
+        </small>
+    </div>
+
+    <div th:replace="fragments.html :: footer"></div>
+</body>
+</html>

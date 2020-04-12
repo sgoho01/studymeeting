@@ -73,6 +73,20 @@ public class AccountController {
         model.addAttribute("numberOfUser", accountRepository.count());
         model.addAttribute("nickname", account.getNickname());
         return view;
+    }
 
+    @GetMapping("/check-email")
+    public String checkEmail(@CurrentUser Account account, Model model) {
+        model.addAttribute("account", account);
+        return "account/check-email";
+    }
+
+    @GetMapping("/resend-email-token")
+    public String resendEmailToken(@CurrentUser Account account, Model model) {
+        if (account != null) {
+            accountService.sendSignUpConfirmEmail(account);
+            model.addAttribute(account);
+        }
+        return "index";
     }
 }
