@@ -83,10 +83,12 @@ public class AccountController {
 
     @GetMapping("/resend-email-token")
     public String resendEmailToken(@CurrentUser Account account, Model model) {
-        if (account != null) {
-            accountService.sendSignUpConfirmEmail(account);
+        if (!account.canSendConfirmEmail()) {
+            model.addAttribute("error", "인증 이메일은 1시간에 한번만 전송할 수 있습니다.");
             model.addAttribute(account);
+            return "account/check-email";
         }
-        return "index";
+        accountService.sendSignUpConfirmEmail(account);
+        return "redirect:/";
     }
 }
