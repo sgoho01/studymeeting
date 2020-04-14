@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
+<!-- 헤더 -->
 <head th:fragment="head">
     <meta charset="UTF-8">
     <title>StudyMeeting</title>
@@ -17,6 +18,7 @@
     </style>
 </head>
 
+<!-- 홈화면 상단 네비게이션바 -->
 <nav th:fragment="main-nav" class="navbar navbar-expand-sm navbar-dark bg-dark">
     <a class="navbar-brand" href="/" th:href="@{/}">
         <img src="/images/logo_sm.png" width="30" height="30">
@@ -76,6 +78,7 @@
     </div>
 </nav>
 
+<!-- 푸터 -->
 <footer th:fragment="footer">
     <div class="row justify-content-center">
         <img class="mb-2" src="/images/logo_long_kr.jpg" alt="" width="100">
@@ -83,6 +86,19 @@
     </div>
 </footer>
 
+
+<div th:fragment="settings-menu (currentMenu)" class="list-group">
+    <a href="#" class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'profile'} ? active" th:href="@{settings/profile}">프로필</a>
+    <a href="#" class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'password'} ? active" th:href="@{settings/password}">패스워드</a>
+    <a href="#" class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'notifications'} ? active" th:href="@{settings/notifications}">알림</a>
+    <a href="#" class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'tags'} ? active" th:href="@{settings/tags}">tags</a>
+    <a href="#" class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'zones'} ? active" th:href="@{settings/zones}">zones</a>
+    <a href="#" class="list-group-item list-group-item-action list-group-item-danger" th:classappend="${currentMenu == 'account'} ? active" th:href="@{settings/account}">계정</a>
+
+</div>
+
+
+<!-- 폼 validation -->
 <script type="application/javascript" th:fragment="form-validation">
     (function () {
         'use strict';

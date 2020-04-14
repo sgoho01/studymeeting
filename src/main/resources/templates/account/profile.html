@@ -67,6 +67,9 @@
                             </span>
                             <span th:text="${#temporals.format(account.joinedAt, 'yyyy년 M월 가입')}" class="col-9"></span>
                         </p>
+                        <div th:if="${isOwner}">
+                            <a href="#" class="btn btn-outline-primary" th:href="@{/settings/profile}">프로필 수정</a>
+                        </div>
                     </div>
                     <div class="tab-pane fade" id="v-pills-study" role="tabpanel" aria-labelledby="v-pills-study-tab">
                         Study
