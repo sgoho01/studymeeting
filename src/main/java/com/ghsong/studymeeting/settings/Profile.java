@@ -2,6 +2,7 @@ package com.ghsong.studymeeting.settings;
 
 import com.ghsong.studymeeting.domain.Account;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @author : song6
@@ -9,6 +10,7 @@ import lombok.Data;
  * Copyright(©) 2020
  */
 @Data
+@NoArgsConstructor
 public class Profile {
 
     private String bio;
