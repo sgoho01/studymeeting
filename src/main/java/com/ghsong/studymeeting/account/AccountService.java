@@ -23,6 +23,7 @@ import java.util.List;
  * Date: 2020-04-05
  * Copyright(©) 2020
  */
+@Transactional
 @Service
 @RequiredArgsConstructor
 public class AccountService implements UserDetailsService {
@@ -31,7 +32,6 @@ public class AccountService implements UserDetailsService {
     private final JavaMailSender javaMailSender;
     private final PasswordEncoder passwordEncoder;
 
-    @Transactional
     public Account processNewAccount(SignUpForm signUpForm) {
         Account newAccount = saveNewAccount(signUpForm);
         newAccount.generateEmailCheckToken();
@@ -69,6 +69,7 @@ public class AccountService implements UserDetailsService {
         SecurityContextHolder.getContext().setAuthentication(token);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public UserDetails loadUserByUsername(String nicknameOrEmail) throws UsernameNotFoundException {
         Account account = accountRepository.findByEmail(nicknameOrEmail);
@@ -79,5 +80,10 @@ public class AccountService implements UserDetailsService {
             throw new UsernameNotFoundException(nicknameOrEmail);
         }
         return new UserAccount(account);
+    }
+
+    public void completeSignUp(Account account) {
+        account.completeSignUp();
+        login(account);
     }
 }
