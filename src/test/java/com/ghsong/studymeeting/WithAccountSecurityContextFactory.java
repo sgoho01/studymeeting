@@ -16,7 +16,7 @@ import org.springframework.security.test.context.support.WithSecurityContextFact
  * Copyright(©) 2020
  */
 @RequiredArgsConstructor
-public class WithAccountSecurityCOntextFactory implements WithSecurityContextFactory<WithAccount> {
+public class WithAccountSecurityContextFactory implements WithSecurityContextFactory<WithAccount> {
 
     private final AccountService accountService;
 

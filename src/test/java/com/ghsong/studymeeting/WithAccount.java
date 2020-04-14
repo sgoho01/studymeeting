@@ -11,7 +11,7 @@ import java.lang.annotation.RetentionPolicy;
  * Copyright(©) 2020
  */
 @Retention(RetentionPolicy.RUNTIME)
-@WithSecurityContext(factory = WithAccountSecurityCOntextFactory.class)
+@WithSecurityContext(factory = WithAccountSecurityContextFactory.class)
 public @interface WithAccount {
 
     String value();
