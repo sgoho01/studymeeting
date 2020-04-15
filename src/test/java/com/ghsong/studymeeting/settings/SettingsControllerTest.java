@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithSecurityContext;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
@@ -40,14 +41,17 @@ class SettingsControllerTest {
     @Autowired
     AccountRepository accountRepository;
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
     @AfterEach
     void afterEach() {
         accountRepository.deleteAll();
     }
 
+    @WithAccount("ghsong")
     @DisplayName("프로필 수정 폼")
     @Test
-    @WithAccount("ghsong")
     void update_profile_form() throws Exception {
         String bio = "소개수정";
         mockMvc.perform(get(SettingsController.SETTINGS_PROFILE_URL))
@@ -57,9 +61,9 @@ class SettingsControllerTest {
                 .andExpect(model().attributeExists("profile"));
     }
 
+    @WithAccount("ghsong")
     @DisplayName("프로필 수정 - 입력값 정상")
     @Test
-    @WithAccount("ghsong")
     void update_profile_correct_input() throws Exception {
         String bio = "소개수정";
         mockMvc.perform(post(SettingsController.SETTINGS_PROFILE_URL)
@@ -74,9 +78,9 @@ class SettingsControllerTest {
         assertEquals(bio, ghsong.getBio());
     }
 
+    @WithAccount("ghsong")
     @DisplayName("프로필 수정 - 입력값 에러")
     @Test
-    @WithAccount("ghsong")
     void update_profile_wrong_input() throws Exception {
         String bio = "길게 수정하는 경우,길게 수정하는 경우,길게 수정하는 경우,길게 수정하는 경우,길게 수정하는 경우,길게 수정하는 경우,길게 수정하는 경우,길게 수정하는 경우";
         mockMvc.perform(post(SettingsController.SETTINGS_PROFILE_URL)
@@ -91,6 +95,49 @@ class SettingsControllerTest {
 
         Account ghsong = accountRepository.findByNickname("ghsong");
         assertNull(ghsong.getBio());
+    }
+
+    @WithAccount("ghsong")
+    @DisplayName("패스워드 수정 폼")
+    @Test
+    void update_password_form() throws Exception {
+        mockMvc.perform(get("/settings/password"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("account"))
+                .andExpect(model().attributeExists("passwordForm"));
+    }
+
+    @WithAccount("ghsong")
+    @DisplayName("패스워드 수정 - 입력값 정상")
+    @Test
+    void update_password_correct_input() throws Exception {
+        mockMvc.perform(post("/settings/password")
+                .param("newPassword", "12345678")
+                .param("newPasswordConfirm", "12345678")
+                .with(csrf()))
+                .andDo(print())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(flash().attributeExists("message"));
+
+        Account ghsong = accountRepository.findByNickname("ghsong");
+        assertTrue(passwordEncoder.matches("12345678", ghsong.getPassword()));
+    }
+
+    @WithAccount("ghsong")
+    @DisplayName("패스워드 수정 - 입력값 에러 - 패스워드 불일치")
+    @Test
+    void update_password_wrong_input() throws Exception {
+        mockMvc.perform(post("/settings/password")
+                .param("newPassword", "12345678")
+                .param("newPasswordConfirm", "12345679")
+                .with(csrf()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(view().name(SettingsController.SETTINGS_PASSWORD_VIEW_NAME))
+                .andExpect(model().attributeExists("passwordForm"))
+                .andExpect(model().attributeExists("account"))
+                .andExpect(model().hasErrors());
     }
 
 }
