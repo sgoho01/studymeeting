@@ -10,27 +10,18 @@ import lombok.NoArgsConstructor;
  * Copyright(©) 2020
  */
 @Data
-@NoArgsConstructor
 public class Notifications {
 
-    private boolean studyCreateByEmail;
+    private boolean studyCreatedByEmail;
 
-    private boolean studyCreateByWeb;
+    private boolean studyCreatedByWeb;
 
     private boolean studyEnrollmentResultByEmail;
 
     private boolean studyEnrollmentResultByWeb;
 
-    private boolean studyUpdateByEmail;
+    private boolean studyUpdatedByEmail;
 
-    private boolean studyUpdateByWeb;
+    private boolean studyUpdatedByWeb;
 
-    public Notifications(Account account) {
-        this.studyCreateByEmail = account.isStudyCreatedByEmail();
-        this.studyCreateByWeb = account.isStudyCreatedByWeb();
-        this.studyEnrollmentResultByEmail = account.isStudyEnrollmentResultByEmail();
-        this.studyEnrollmentResultByWeb = account.isStudyEnrollmentResultByWeb();
-        this.studyUpdateByEmail = account.isStudyUpdatedByEmail();
-        this.studyUpdateByWeb = account.isStudyUpdatedByWeb();
-    }
 }
