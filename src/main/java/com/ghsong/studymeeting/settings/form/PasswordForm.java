@@ -1,4 +1,4 @@
-package com.ghsong.studymeeting.settings;
+package com.ghsong.studymeeting.settings.form;
 
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;

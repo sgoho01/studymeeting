@@ -3,18 +3,14 @@ package com.ghsong.studymeeting.settings;
 import com.ghsong.studymeeting.WithAccount;
 import com.ghsong.studymeeting.account.AccountRepository;
 import com.ghsong.studymeeting.account.AccountService;
-import com.ghsong.studymeeting.account.SignUpForm;
 import com.ghsong.studymeeting.domain.Account;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.test.context.support.WithSecurityContext;
-import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.junit.jupiter.api.Assertions.*;

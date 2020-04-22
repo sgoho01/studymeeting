@@ -3,6 +3,12 @@ package com.ghsong.studymeeting.settings;
 import com.ghsong.studymeeting.account.AccountService;
 import com.ghsong.studymeeting.account.CurrentUser;
 import com.ghsong.studymeeting.domain.Account;
+import com.ghsong.studymeeting.settings.form.NicknameForm;
+import com.ghsong.studymeeting.settings.form.Notifications;
+import com.ghsong.studymeeting.settings.form.PasswordForm;
+import com.ghsong.studymeeting.settings.form.Profile;
+import com.ghsong.studymeeting.settings.validator.NIcknameFormValidator;
+import com.ghsong.studymeeting.settings.validator.PasswordFormValidator;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
@@ -11,7 +17,6 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -27,20 +32,26 @@ import javax.validation.Valid;
 public class SettingsController {
 
     static final String SETTINGS_PROFILE_VIEW_NAME = "settings/profile";
-    static final String SETTINGS_PROFILE_URL = "/settings/profile";
-
+    static final String SETTINGS_PROFILE_URL = "/" + SETTINGS_PROFILE_VIEW_NAME;
     static final String SETTINGS_PASSWORD_VIEW_NAME = "settings/password";
-    static final String SETTINGS_PASSWORD_URL = "/settings/password";
-
+    static final String SETTINGS_PASSWORD_URL = "/" + SETTINGS_PASSWORD_VIEW_NAME;
     static final String SETTINGS_NOTIFICATION_VIEW_NAME = "settings/notifications";
-    static final String SETTINGS_NOTIFICATION_URL = "/settings/notifications";
+    static final String SETTINGS_NOTIFICATION_URL = "/" + SETTINGS_NOTIFICATION_VIEW_NAME;
+    static final String SETTINGS_ACCOUNT_VIEW_NAME = "settings/account";
+    static final String SETTINGS_ACCOUNT_URL = "/" + SETTINGS_ACCOUNT_VIEW_NAME;
 
     private final AccountService accountService;
     private final ModelMapper modelMapper;
+    private final NIcknameFormValidator nIcknameFormValidator;
 
     @InitBinder("passwordForm")
-    public void initBinder(WebDataBinder webDataBinder) {
+    public void passwordFormBinder(WebDataBinder webDataBinder) {
         webDataBinder.addValidators(new PasswordFormValidator());
+    }
+
+    @InitBinder("nicknameForm")
+    public void nicknameBinder(WebDataBinder webDataBinder) {
+        webDataBinder.addValidators(nIcknameFormValidator);
     }
 
     @GetMapping(SETTINGS_PROFILE_URL)
@@ -99,6 +110,24 @@ public class SettingsController {
         accountService.updateNotifications(account, notifications);
         attributes.addFlashAttribute("message", "알림 설정을 변경했습니다.");
         return "redirect:" + SETTINGS_NOTIFICATION_URL;
+    }
+
+    @GetMapping(SETTINGS_ACCOUNT_URL)
+    public String updateAccountForm(@CurrentUser Account account, Model model) {
+        model.addAttribute(account);
+        model.addAttribute(modelMapper.map(account, NicknameForm.class));
+        return SETTINGS_ACCOUNT_VIEW_NAME;
+    }
+
+    @PostMapping(SETTINGS_ACCOUNT_URL)
+    public String updateAccount(@CurrentUser Account account, @Valid NicknameForm nicknameForm, Errors errors, Model model, RedirectAttributes redirectAttributes) {
+        if(errors.hasErrors()) {
+            model.addAttribute(account);
+            return SETTINGS_ACCOUNT_VIEW_NAME;
+        }
+        accountService.updateAccount(account, nicknameForm.getNickname());
+        redirectAttributes.addFlashAttribute("message", "닉네임을 수정했습니다.");
+        return "redirect:" + SETTINGS_ACCOUNT_URL;
     }
 
 }

@@ -1,4 +1,4 @@
-package com.ghsong.studymeeting.settings;
+package com.ghsong.studymeeting.settings.form;
 
 import com.ghsong.studymeeting.domain.Account;
 import lombok.Data;

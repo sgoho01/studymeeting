@@ -1,5 +1,6 @@
-package com.ghsong.studymeeting.settings;
+package com.ghsong.studymeeting.settings.validator;
 
+import com.ghsong.studymeeting.settings.form.PasswordForm;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
