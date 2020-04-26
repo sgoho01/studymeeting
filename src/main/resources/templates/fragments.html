@@ -7,6 +7,7 @@
     <title>StudyMeeting</title>
     <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/node_modules/font-awesome/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="/node_modules/@yaireo/tagify/dist/tagify.css">
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
@@ -14,6 +15,23 @@
     <style>
         .container {
             max-width: 100%;
+        }
+        .tagify--outside{
+            border: 0;
+        }
+
+        .tagify--outside .tagify__input{
+            order: -1;
+            flex: 100%;
+            border: 1px solid var(--tags-border-color);
+            margin-bottom: 1em;
+            transition: .1s;
+        }
+
+        .tagify--outside .tagify__input:hover{ border-color:var(--tags-hover-border-color); }
+        .tagify--outside.tagify--focus .tagify__input{
+            transition:0s;
+            border-color: var(--tags-focus-border-color);
         }
     </style>
 </head>
@@ -93,7 +111,7 @@
     <a href="#" class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'profile'} ? active" th:href="@{/settings/profile}">프로필</a>
     <a href="#" class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'password'} ? active" th:href="@{/settings/password}">패스워드</a>
     <a href="#" class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'notifications'} ? active" th:href="@{/settings/notifications}">알림</a>
-    <a href="#" class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'keywords'} ? active" th:href="@{/settings/keywords}">관심 주제</a>
+    <a href="#" class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'tags'} ? active" th:href="@{/settings/tags}">관심 주제</a>
     <a href="#" class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'locations'} ? active" th:href="@{/settings/locations}">활동 지역</a>
     <a href="#" class="list-group-item list-group-item-action list-group-item-danger" th:classappend="${currentMenu == 'account'} ? active" th:href="@{/settings/account}">계정</a>
 
