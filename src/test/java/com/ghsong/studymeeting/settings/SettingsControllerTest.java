@@ -1,17 +1,25 @@
 package com.ghsong.studymeeting.settings;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ghsong.studymeeting.WithAccount;
 import com.ghsong.studymeeting.account.AccountRepository;
 import com.ghsong.studymeeting.account.AccountService;
 import com.ghsong.studymeeting.domain.Account;
+import com.ghsong.studymeeting.domain.Tag;
+import com.ghsong.studymeeting.settings.form.TagForm;
+import com.ghsong.studymeeting.tag.TagRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -24,21 +32,24 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Date: 2020-04-14
  * Copyright(©) 2020
  */
+@Transactional
 @SpringBootTest
 @AutoConfigureMockMvc
 class SettingsControllerTest {
 
     @Autowired
     MockMvc mockMvc;
-
     @Autowired
     AccountService accountService;
-
     @Autowired
     AccountRepository accountRepository;
-
     @Autowired
     PasswordEncoder passwordEncoder;
+    @Autowired
+    ObjectMapper objectMapper;
+    @Autowired
+    TagRepository tagRepository;
+
 
     @AfterEach
     void afterEach() {
@@ -134,6 +145,59 @@ class SettingsControllerTest {
                 .andExpect(model().attributeExists("passwordForm"))
                 .andExpect(model().attributeExists("account"))
                 .andExpect(model().hasErrors());
+    }
+
+    @WithAccount("ghsong")
+    @DisplayName("태그 수정 폼")
+    @Test
+    void update_tags_form() throws Exception {
+        mockMvc.perform(get(SettingsController.SETTINGS_TAGS_URL))
+                .andExpect(view().name(SettingsController.SETTINGS_TAGS_VIEW_NAME))
+                .andExpect(model().attributeExists("account"))
+                .andExpect(model().attributeExists("whitelist"))
+                .andExpect(model().attributeExists("tags"));
+    }
+
+    @WithAccount("ghsong")
+    @DisplayName("계정에 태그 추가")
+    @Test
+    void add_tag() throws Exception {
+        TagForm tagForm = new TagForm();
+        tagForm.setTagTitle("newTag");
+
+        mockMvc.perform(post(SettingsController.SETTINGS_TAGS_URL + "/add")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(tagForm))
+                .with(csrf()))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        Tag newTag = tagRepository.findByTitle("newTag").orElse(null);
+        assertNotNull(newTag);
+        assertTrue(accountRepository.findByNickname("ghsong").getTags().contains(newTag));
+    }
+
+    @WithAccount("ghsong")
+    @DisplayName("태그 삭제")
+    @Test
+    void remove_tag() throws Exception {
+        Account ghsong = accountRepository.findByNickname("ghsong");
+        Tag newTag = tagRepository.save(Tag.builder().title("newTag").build());
+        accountService.addTag(ghsong, newTag);
+
+        assertTrue(ghsong.getTags().contains(newTag));
+
+        TagForm tagForm = new TagForm();
+        tagForm.setTagTitle("newTag");
+
+        mockMvc.perform(post(SettingsController.SETTINGS_TAGS_URL + "/remove")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(tagForm))
+                .with(csrf()))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        assertFalse(ghsong.getTags().contains(newTag));
     }
 
 }
