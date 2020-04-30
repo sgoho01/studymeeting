@@ -252,7 +252,7 @@ class SettingsControllerTest {
         Zone zone = zoneRepository.findByCityAndProvince(testZone.getCity(), testZone.getProvince()).orElseThrow();
         accountService.addZone(ghsong, zone);
 
-        assertTrue(ghsong.getTags().contains(zone));
+        assertTrue(ghsong.getZones().contains(zone));
 
         ZoneForm zoneForm = new ZoneForm();
         zoneForm.setZoneName(testZone.toString());

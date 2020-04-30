@@ -82,7 +82,7 @@ public class SettingsController {
 
         accountService.updateProfile(account, profile);
         attributes.addFlashAttribute("message", "프로필을 수정했습니다.");
-        return "redirect:/" + ROOT + PROFILE;
+        return "redirect:/" + SETTINGS + PROFILE;
     }
 
     @GetMapping(PASSWORD)
