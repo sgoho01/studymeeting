@@ -1,6 +1,7 @@
 package com.ghsong.studymeeting.account;
 
 import com.ghsong.studymeeting.domain.Account;
+import com.ghsong.studymeeting.domain.Tag;
 import com.ghsong.studymeeting.settings.form.Notifications;
 import com.ghsong.studymeeting.settings.form.Profile;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author : song6
@@ -118,5 +120,10 @@ public class AccountService implements UserDetailsService {
         simpleMailMessage.setSubject("스터디미팅, 로그인 링크");
         simpleMailMessage.setText("/login-by-email?token=" + account.getEmailCheckToken() + "&email=" + account.getEmail());
         javaMailSender.send(simpleMailMessage);
+    }
+
+    public void addTag(Account account, Tag tag) {
+        Optional<Account> byId = accountRepository.findById(account.getId());
+        byId.ifPresent(a -> a.getTags().add(tag));
     }
 }
