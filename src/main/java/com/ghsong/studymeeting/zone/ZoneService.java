@@ -1,7 +1,6 @@
-package com.ghsong.studymeeting.tag;
+package com.ghsong.studymeeting.zone;
 
 import com.ghsong.studymeeting.domain.Zone;
-import com.ghsong.studymeeting.zone.ZoneRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -30,7 +29,7 @@ public class ZoneService {
     @PostConstruct
     public void initZoneData() throws IOException {
         if(zoneRepository.count() == 0) {
-            Resource resource = new ClassPathResource("zones_kr.csv");
+            Resource resource = new ClassPathResource("/zones_kr.csv");
             List<Zone> zoneList = Files.readAllLines(resource.getFile().toPath(), StandardCharsets.UTF_8).stream()
                     .map(line -> {
                         String[] split = line.split(",");
