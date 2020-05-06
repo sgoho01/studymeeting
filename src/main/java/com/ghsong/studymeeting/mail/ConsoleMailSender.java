@@ -16,7 +16,7 @@ import java.io.InputStream;
  * Date: 2020-04-05
  * Copyright(©) 2020
  */
-@Profile("local")
+@Profile({"local", "dev"})
 @Component
 @Slf4j
 public class ConsoleMailSender implements JavaMailSender {
