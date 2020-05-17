@@ -1,7 +1,8 @@
 package com.ghsong.studymeeting.account;
 
 import com.ghsong.studymeeting.domain.Account;
-import com.ghsong.studymeeting.mail.ConsoleMailSender;
+import com.ghsong.studymeeting.mail.EmailMessage;
+import com.ghsong.studymeeting.mail.EmailService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,7 @@ class AccountControllerTest {
     private AccountRepository accountRepository;
 
     @MockBean
-    ConsoleMailSender javaMailSender;
+    EmailService emailService;
 
 
     @DisplayName("회원 가입 화면 보이는지 테스트")
@@ -84,7 +85,7 @@ class AccountControllerTest {
         assertNotNull(account);
         assertNotEquals(account.getPassword(), "12345678");
         assertNotNull(account.getEmailCheckToken());
-        then(javaMailSender).should().send(any(SimpleMailMessage.class));
+        then(emailService).should().sendEmail(any(EmailMessage.class));
     }
 
 
