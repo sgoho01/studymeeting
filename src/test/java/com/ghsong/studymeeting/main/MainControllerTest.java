@@ -2,7 +2,7 @@ package com.ghsong.studymeeting.main;
 
 import com.ghsong.studymeeting.account.AccountRepository;
 import com.ghsong.studymeeting.account.AccountService;
-import com.ghsong.studymeeting.account.SignUpForm;
+import com.ghsong.studymeeting.account.form.SignUpForm;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

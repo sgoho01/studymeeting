@@ -1,5 +1,6 @@
 package com.ghsong.studymeeting.account;
 
+import com.ghsong.studymeeting.account.form.SignUpForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;

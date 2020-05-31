@@ -1,5 +1,6 @@
 package com.ghsong.studymeeting.account;
 
+import com.ghsong.studymeeting.account.form.SignUpForm;
 import com.ghsong.studymeeting.domain.Account;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

@@ -1,7 +1,7 @@
 package com.ghsong.studymeeting;
 
 import com.ghsong.studymeeting.account.AccountService;
-import com.ghsong.studymeeting.account.SignUpForm;
+import com.ghsong.studymeeting.account.form.SignUpForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
