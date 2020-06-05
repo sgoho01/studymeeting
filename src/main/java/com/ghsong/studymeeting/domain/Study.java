@@ -13,6 +13,11 @@ import java.util.Set;
  * Date: 2020-05-17
  * Copyright(©) 2020
  */
+@NamedEntityGraph(name = "Study.withAll" , attributeNodes = {
+        @NamedAttributeNode("tags"),
+        @NamedAttributeNode("zones"),
+        @NamedAttributeNode("members"),
+        @NamedAttributeNode("managers")})
 @Entity
 @Getter @Setter @EqualsAndHashCode(of = "id")
 @AllArgsConstructor @NoArgsConstructor
