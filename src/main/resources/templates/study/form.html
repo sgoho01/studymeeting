@@ -30,7 +30,7 @@
                 </div>
                 <div class="form-group">
                     <label for="shortDescription">짧은 소개</label>
-                    <textarea id="shortDescription" type="text" class="form-control" th:field="*{shortDescription}" placeholder="스터디를 자세히 설명해 주세요." aria-describedby="shortDescriptionHelp" required max="100"></textarea>
+                    <textarea id="shortDescription" type="text" class="form-control" th:field="*{shortDescription}" placeholder="스터디를 짧게 설명해 주세요." aria-describedby="shortDescriptionHelp" required max="100"></textarea>
                     <small class="form-text text-muted" id="shortDescriptionHelp">
                         100자 이내로 스터디를 짧은 소개해 주세요.
                     </small>
@@ -57,16 +57,6 @@
     </div>
 
     <srcipt th:replace="fragments.html :: form-validation"></srcipt>
-    <script src="/node_modules/summernote/dist/summernote-bs4.js"></script>
-    <script type="application/javascript">
-        $(function() {
-            $('#fullDescription').summernote({
-                fontNames: ['Arial','Arial Black','Noto Sans KR'],
-                placeholder: '스터디 내용',
-                tabsize: 2,
-                height: 300
-            });
-        });
-    </script>
+    <script th:replace="fragments.html :: editor-script"></script>
 </body>
 </html>
