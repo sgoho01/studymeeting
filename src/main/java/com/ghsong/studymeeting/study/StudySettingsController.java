@@ -5,6 +5,7 @@ import com.ghsong.studymeeting.domain.Account;
 import com.ghsong.studymeeting.domain.Study;
 import com.ghsong.studymeeting.study.form.StudyDescriptionForm;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -27,13 +28,14 @@ import javax.validation.Valid;
 public class StudySettingsController {
 
     private final StudyService studyService;
+    private final ModelMapper modelMapper;
 
     @GetMapping("/description")
     public String viewStudySettings(@CurrentUser Account account, @PathVariable String path, Model model) {
         Study study = studyService.getStudy(path);
         model.addAttribute(account);
         model.addAttribute(study);
-        model.addAttribute(new StudyDescriptionForm());
+        model.addAttribute(modelMapper.map(study, StudyDescriptionForm.class));
         return "study/settings/description";
     }
 
@@ -51,7 +53,7 @@ public class StudySettingsController {
 
         studyService.updaetStudyDescription(study, studyDescriptionForm);
         redirectAttributes.addFlashAttribute("message", "스터디 소개를 수정했습니다.");
-        return "redirect:/study/" + study.getPath() + "/settings/description";
+        return "redirect:/study/" + path + "/settings/description";
     }
 
 }

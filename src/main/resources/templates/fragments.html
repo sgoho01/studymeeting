@@ -258,6 +258,7 @@
     </ul>
 </div>
 
+<!-- 스터디 설정 메뉴 -->
 <div th:fragment="study-settings-menu (currentMenu)" class="list-group">
     <a href="#" class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'description'} ? active"
        th:href="@{'/study' + ${study.path} + '/settings/description'}">소개</a>
@@ -271,6 +272,7 @@
        th:href="@{'/study' + ${study.path} + '/settings/study'}">스터디</a>
 </div>
 
+<!-- 폼 완료 메세지 -->
 <div th:fragment="message" th:if="${message}" class="alert alert-info alert-dismissible fade show mt-3" role="alert">
     <span th:text="${message}">완료</span>
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -278,7 +280,7 @@
     </button>
 </div>
 
-
+<!-- 에디터 -->
 <div th:fragment="editor-script">
     <script src="/node_modules/summernote/dist/summernote-bs4.js"></script>
     <script type="application/javascript">
