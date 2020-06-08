@@ -53,7 +53,43 @@ public class StudySettingsController {
 
         studyService.updaetStudyDescription(study, studyDescriptionForm);
         redirectAttributes.addFlashAttribute("message", "스터디 소개를 수정했습니다.");
-        return "redirect:/study/" + path + "/settings/description";
+        return "redirect:/study/" + study.getEncodePath() + "/settings/description";
     }
+
+    @GetMapping("/banner")
+    public String viewStudyBanner(@CurrentUser Account account, @PathVariable String path, Model model) {
+        Study study = studyService.getStudy(path);
+        model.addAttribute(account);
+        model.addAttribute(study);
+        return "study/settings/banner";
+    }
+
+    @PostMapping("/banner/enable")
+    public String enableStudyBanner(@CurrentUser Account account, @PathVariable String path, Model model) {
+        Study study = studyService.getStudyToUpdate(account, path);
+        studyService.enableStudyBanner(study);
+        model.addAttribute(account);
+        model.addAttribute(study);
+        return "redirect:/study/" + study.getEncodePath() + "/settings/banner";
+    }
+
+    @PostMapping("/banner/disable")
+    public String disableStudyBanner(@CurrentUser Account account, @PathVariable String path, Model model) {
+        Study study = studyService.getStudyToUpdate(account, path);
+        studyService.disableStudyBanner(study);
+        model.addAttribute(account);
+        model.addAttribute(study);
+        return "redirect:/study/" + study.getEncodePath() + "/settings/banner";
+    }
+
+    @PostMapping("/banner")
+    public String updateStudyBanner(@CurrentUser Account account, @PathVariable String path,
+                                    String image, Model model, RedirectAttributes redirectAttributes) {
+        Study study = studyService.getStudyToUpdate(account, path);
+        studyService.updateStudyBanner(study, image);
+        redirectAttributes.addAttribute("message", "스터디 배너이미지가 변경되었습니다.");
+        return "redirect:/study/" + study.getEncodePath() + "/settings/banner";
+    }
+
 
 }
