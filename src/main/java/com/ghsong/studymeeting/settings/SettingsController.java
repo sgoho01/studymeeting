@@ -11,7 +11,10 @@ import com.ghsong.studymeeting.settings.form.*;
 import com.ghsong.studymeeting.settings.validator.NIcknameFormValidator;
 import com.ghsong.studymeeting.settings.validator.PasswordFormValidator;
 import com.ghsong.studymeeting.tag.TagRepository;
+import com.ghsong.studymeeting.tag.TagService;
+import com.ghsong.studymeeting.tag.form.TagForm;
 import com.ghsong.studymeeting.zone.ZoneRepository;
+import com.ghsong.studymeeting.zone.form.ZoneForm;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +27,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -53,6 +55,7 @@ public class SettingsController {
     private final ModelMapper modelMapper;
     private final NIcknameFormValidator nIcknameFormValidator;
     private final TagRepository tagRepository;
+    private final TagService tagService;
     private final ZoneRepository zoneRepository;
     private final ObjectMapper objectMapper;
 
@@ -156,11 +159,8 @@ public class SettingsController {
     @PostMapping(TAGS + ADD)
     @ResponseBody
     public ResponseEntity addTag(@CurrentUser Account account, @RequestBody TagForm tagForm) {
-        String title = tagForm.getTagTitle();
-        Tag tag = tagRepository.findByTitle(title).orElseGet(() -> tagRepository.save(Tag.builder().title(title).build()));
-
+        Tag tag = tagService.findOrCreateNewTag(tagForm.getTagTitle());
         accountService.addTag(account, tag);
-
         return ResponseEntity.ok().build();
     }
 

@@ -7,8 +7,8 @@ import com.ghsong.studymeeting.account.AccountService;
 import com.ghsong.studymeeting.domain.Account;
 import com.ghsong.studymeeting.domain.Tag;
 import com.ghsong.studymeeting.domain.Zone;
-import com.ghsong.studymeeting.settings.form.TagForm;
-import com.ghsong.studymeeting.settings.form.ZoneForm;
+import com.ghsong.studymeeting.tag.form.TagForm;
+import com.ghsong.studymeeting.zone.form.ZoneForm;
 import com.ghsong.studymeeting.tag.TagRepository;
 import com.ghsong.studymeeting.zone.ZoneRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -22,8 +22,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 import static com.ghsong.studymeeting.settings.SettingsController.*;
 import static org.junit.jupiter.api.Assertions.*;

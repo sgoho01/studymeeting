@@ -20,6 +20,12 @@ import java.util.Set;
         @NamedAttributeNode("zones"),
         @NamedAttributeNode("members"),
         @NamedAttributeNode("managers")})
+@NamedEntityGraph(name = "Study.withTagsAndManager", attributeNodes =  {
+        @NamedAttributeNode("tags"),
+        @NamedAttributeNode("managers")})
+@NamedEntityGraph(name = "Study.withZonesAndManager", attributeNodes =  {
+        @NamedAttributeNode("zones"),
+        @NamedAttributeNode("managers")})
 @Entity
 @Getter @Setter @EqualsAndHashCode(of = "id")
 @AllArgsConstructor @NoArgsConstructor

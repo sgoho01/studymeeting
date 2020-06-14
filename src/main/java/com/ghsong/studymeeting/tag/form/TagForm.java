@@ -1,4 +1,4 @@
-package com.ghsong.studymeeting.settings.form;
+package com.ghsong.studymeeting.tag.form;
 
 import lombok.Data;
 
