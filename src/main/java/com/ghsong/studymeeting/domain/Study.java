@@ -15,20 +15,25 @@ import java.util.Set;
  * Date: 2020-05-17
  * Copyright(©) 2020
  */
-@NamedEntityGraph(name = "Study.withAll" , attributeNodes = {
+@NamedEntityGraph(name = "Study.withAll", attributeNodes = {
         @NamedAttributeNode("tags"),
         @NamedAttributeNode("zones"),
         @NamedAttributeNode("members"),
         @NamedAttributeNode("managers")})
-@NamedEntityGraph(name = "Study.withTagsAndManager", attributeNodes =  {
+@NamedEntityGraph(name = "Study.withTagsAndManager", attributeNodes = {
         @NamedAttributeNode("tags"),
         @NamedAttributeNode("managers")})
-@NamedEntityGraph(name = "Study.withZonesAndManager", attributeNodes =  {
+@NamedEntityGraph(name = "Study.withZonesAndManager", attributeNodes = {
         @NamedAttributeNode("zones"),
         @NamedAttributeNode("managers")})
+@NamedEntityGraph(name = "Study.withManager", attributeNodes = {
+        @NamedAttributeNode("managers")})
 @Entity
-@Getter @Setter @EqualsAndHashCode(of = "id")
-@AllArgsConstructor @NoArgsConstructor
+@Getter
+@Setter
+@EqualsAndHashCode(of = "id")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Study {
 
     @Id
@@ -48,10 +53,12 @@ public class Study {
 
     private String shortDescription;
 
-    @Lob @Basic(fetch = FetchType.EAGER)
+    @Lob
+    @Basic(fetch = FetchType.EAGER)
     private String fullDescription;
 
-    @Lob @Basic(fetch = FetchType.EAGER)
+    @Lob
+    @Basic(fetch = FetchType.EAGER)
     private String image;
 
     @ManyToMany
@@ -101,4 +108,45 @@ public class Study {
     public String getImage() {
         return this.image != null ? image : "/images/default_banner2.png";
     }
+
+    public void publish() {
+        if (!this.published && !this.closed) {
+            this.published = true;
+            this.publishedDateTime = LocalDateTime.now();
+        } else {
+            throw new RuntimeException("스터디를 공개할 수 없는 상태입니다. 스터디를 이미 공개했거나 종료했습니다.");
+        }
+    }
+
+    public void close() {
+        if (this.published && !this.closed) {
+            this.closed = true;
+            this.closedDateTime = LocalDateTime.now();
+        } else {
+            throw new RuntimeException("스터디를 종료할 수 없습니다. 스터디를 공개하지 않았거나 이미 종료한 스터디입니다.");
+        }
+    }
+
+    public boolean canUpdateRecruiting() {
+        return this.published && this.recruitingUpdatedDateTime == null || this.recruitingUpdatedDateTime.isBefore(LocalDateTime.now().minusHours(1));
+    }
+
+    public void startRecruit() {
+        if(canUpdateRecruiting()) {
+            this.recruiting = true;
+            this.recruitingUpdatedDateTime = LocalDateTime.now();
+        }else {
+            throw new RuntimeException("인원 모집을 시작할 수 없습니다. 스터디를 공개하거나 한 시간 뒤 다시 시도하세요.");
+        }
+    }
+
+    public void stopRecruit() {
+        if(canUpdateRecruiting()) {
+            this.recruiting = false;
+            this.recruitingUpdatedDateTime = LocalDateTime.now();
+        }else{
+            throw new RuntimeException("인원 모집을 종료할 수 없습니다. 스터디를 공개하거나 한 시간 뒤 다시 시도하세요.");
+        }
+    }
+
 }

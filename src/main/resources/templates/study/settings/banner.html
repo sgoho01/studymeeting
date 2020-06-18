@@ -18,7 +18,7 @@
             <div class="col-8">
                 <div th:replace="fragments.html :: message"></div>
                     <div class="row">
-                        <h2 class="col-sm-12" >배너 이미지 사용</h2>
+                        <h5 class="col-sm-12" >배너 이미지 사용</h5>
                     </div>
 
                     <form th:if="${!study.useBanner}" action="#" class="needs-validation" th:action="@{'/study/' + ${study.getEncodePath()} + '/settings/banner/enable'}" method="post" novalidate>
@@ -44,7 +44,7 @@
                     </form>
                     <hr/>
                     <div class="row">
-                        <h2 class="col-sm-12" >배너 이미지 변경</h2>
+                        <h5 class="col-sm-12" >배너 이미지 변경</h5>
                     </div>
                     <form action="#" class="needs-validation" id="imageForm" th:action="@{'/study/' + ${study.getPath()} + '/settings/banner'}" method="post" novalidate>
                         <div class="form-group">

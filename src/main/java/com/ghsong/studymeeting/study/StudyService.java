@@ -11,9 +11,6 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-import java.util.Set;
-
 /**
  * @author : song6
  * Date: 2020-05-31
@@ -52,14 +49,21 @@ public class StudyService {
     }
 
     public Study getStudyToUpdateTag(Account account, String path) {
-        Study study = studyRepository.findAccountWithTagsByPath(path);
+        Study study = studyRepository.findStudyWithTagsByPath(path);
         checkIfExistingStudy(path, study);
         checkIfManager(account, study);
         return study;
     }
 
     public Study getStudyToUpdateZone(Account account, String path) {
-        Study study = studyRepository.findAccountWithZonesByPath(path);
+        Study study = studyRepository.findStudyWithZonesByPath(path);
+        checkIfExistingStudy(path, study);
+        checkIfManager(account, study);
+        return study;
+    }
+
+    public Study getStudyToUpdateStatus(Account account, String path) {
+        Study study = studyRepository.findStudyWithManagerByPath(path);
         checkIfExistingStudy(path, study);
         checkIfManager(account, study);
         return study;
@@ -98,4 +102,26 @@ public class StudyService {
     public void addZone(Study study, Zone zone) {
         study.getZones().add(zone);
     }
+
+    public void removeZone(Study study, Zone zone) {
+        study.getZones().remove(zone);
+    }
+
+    public void publishStudy(Study study) {
+        study.publish();
+    }
+
+    public void closeStudy(Study study) {
+        study.close();
+    }
+
+    public void startRecruit(Study study) {
+        study.startRecruit();
+    }
+
+    public void stopRecruit(Study study) {
+        study.stopRecruit();
+    }
+
+
 }
