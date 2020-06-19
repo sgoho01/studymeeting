@@ -270,6 +270,12 @@ public class StudySettingsController {
         return "redirect:/study/" + study.getEncodePath() + "/settings/study";
     }
 
+    @PostMapping("/study/remove")
+    public String removeStudy(@CurrentUser Account account, @PathVariable String path, Model model, RedirectAttributes redirectAttributes) {
+        Study study = studyService.getStudyToUpdateStatus(account, path);
+        studyService.removeStudy(study);
+        return "redirect:/";
+    }
 
 
 }

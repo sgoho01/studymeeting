@@ -156,4 +156,9 @@ public class Study {
     public void updateTitle(String newTitle) {
         this.title = newTitle;
     }
+
+    public boolean isRemovable() {
+        return !this.published;
+    }
+
 }
