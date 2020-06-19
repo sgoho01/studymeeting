@@ -62,7 +62,6 @@ public class StudyController {
     @GetMapping("/study/{path}")
     public String viewStudy(@CurrentUser Account account, @PathVariable String path, Model model) {
         Study study = studyService.getStudy(path);
-
         model.addAttribute(account);
         model.addAttribute(study);
         return "study/view";
@@ -70,8 +69,27 @@ public class StudyController {
 
     @GetMapping("/study/{path}/members")
     public String viewStudyMembers(@CurrentUser Account account, @PathVariable String path, Model model) {
+        Study study = studyRepository.findByPath(path);
         model.addAttribute(account);
-        model.addAttribute(studyRepository.findByPath(path));
+        model.addAttribute(study);
+        return "study/members";
+    }
+
+    @GetMapping("/study/{path}/join")
+    public String addMember(@CurrentUser Account account, @PathVariable String path, Model model) {
+        Study study = studyService.getStudy(path);
+        studyService.addMember(study, account);
+        model.addAttribute(study);
+        model.addAttribute(account);
+        return "study/members";
+    }
+
+    @GetMapping("/study/{path}/leave")
+    public String removeMember(@CurrentUser Account account, @PathVariable String path, Model model) {
+        Study study = studyService.getStudy(path);
+        studyService.removeMember(study, account);
+        model.addAttribute(study);
+        model.addAttribute(account);
         return "study/members";
     }
 
