@@ -79,18 +79,14 @@ public class StudyController {
     public String addMember(@CurrentUser Account account, @PathVariable String path, Model model) {
         Study study = studyService.getStudy(path);
         studyService.addMember(study, account);
-        model.addAttribute(study);
-        model.addAttribute(account);
-        return "study/members";
+        return "redirect:/study/" + study.getEncodePath() + "/members";
     }
 
     @GetMapping("/study/{path}/leave")
     public String removeMember(@CurrentUser Account account, @PathVariable String path, Model model) {
         Study study = studyService.getStudy(path);
         studyService.removeMember(study, account);
-        model.addAttribute(study);
-        model.addAttribute(account);
-        return "study/members";
+        return "redirect:/study/" + study.getEncodePath() + "/members";
     }
 
 }
