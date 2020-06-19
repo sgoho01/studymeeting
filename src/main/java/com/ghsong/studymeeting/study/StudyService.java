@@ -5,6 +5,7 @@ import com.ghsong.studymeeting.domain.Study;
 import com.ghsong.studymeeting.domain.Tag;
 import com.ghsong.studymeeting.domain.Zone;
 import com.ghsong.studymeeting.study.form.StudyDescriptionForm;
+import com.ghsong.studymeeting.study.form.StudyForm;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.access.AccessDeniedException;
@@ -124,4 +125,22 @@ public class StudyService {
     }
 
 
+    public boolean isValidPath(String newPath) {
+        if (!newPath.matches(StudyForm.VALID_PATH_PATTERN)) {
+            return false;
+        }
+        return !studyRepository.existsByPath(newPath);
+    }
+
+    public void updatePath(Study study, String newPath) {
+        study.updatePath(newPath);
+    }
+
+    public boolean isValidTitle(String newTitle) {
+        return newTitle.length() <= 50;
+    }
+
+    public void updateTitle(Study study, String newTitle) {
+        study.updateTitle(newTitle);
+    }
 }
