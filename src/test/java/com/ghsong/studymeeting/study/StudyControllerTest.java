@@ -2,9 +2,9 @@ package com.ghsong.studymeeting.study;
 
 import com.ghsong.studymeeting.WithAccount;
 import com.ghsong.studymeeting.account.AccountRepository;
+import com.ghsong.studymeeting.account.form.SignUpForm;
 import com.ghsong.studymeeting.domain.Account;
 import com.ghsong.studymeeting.domain.Study;
-import com.ghsong.studymeeting.study.form.StudyForm;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,7 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -96,14 +97,8 @@ class StudyControllerTest {
     @Test
     @DisplayName("스터디 조회")
     public void view_study() throws Exception {
-        Study study = new Study();
-        study.setPath("test");
-        study.setTitle("test");
-        study.setShortDescription("test");
-        study.setFullDescription("testtest");
-
-        Account account = accountRepository.findByNickname("ghsong");
-        studyService.createNewStudy(study, account);
+        Account account = createAccount("song6497");
+        Study study = createStudy("test", account);
 
         mockMvc.perform(get("/study/test"))
                 .andExpect(status().isOk())
@@ -112,5 +107,70 @@ class StudyControllerTest {
                 .andExpect(model().attributeExists("account"));
     }
 
+    @WithAccount("ghsong")
+    @Test
+    @DisplayName("스터디 맴버 조회")
+    public void view_study_member() throws Exception {
+        Account account = createAccount("song6497");
+        Study study = createStudy("test", account);
+
+        mockMvc.perform(get("/study/test/members"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("study/members"))
+                .andExpect(model().attributeExists("study"))
+                .andExpect(model().attributeExists("account"));
+    }
+
+    protected Study createStudy(String path, Account account) {
+        Study study = new Study();
+        study.setPath(path);
+        Study newStudy= studyService.createNewStudy(study, account);
+        return newStudy;
+    }
+
+    protected Account createAccount(String nickname) {
+        Account account = new Account();
+        account.setNickname(nickname);
+        account.setEmail(nickname + "@gmail.com");
+        account.setPassword("12345678");
+        Account newAccount = accountRepository.save(account);
+        return newAccount;
+    }
+
+    @WithAccount("ghsong")
+    @Test
+    @DisplayName("스터디 가입")
+    public void join_study() throws Exception {
+        Account account = createAccount("song6497");
+        Study study = createStudy("test", account);
+
+        mockMvc.perform(get("/study/" + study.getPath() + "/join"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/study/" + study.getPath() + "/members"));
+
+        Account ghsong = accountRepository.findByNickname("ghsong");
+        assertTrue(study.getMembers().contains(ghsong));
+    }
+
+
+    @WithAccount("ghsong")
+    @Test
+    @DisplayName("스터디 탈퇴")
+    public void leave_study() throws Exception {
+        Account account = createAccount("song6497");
+        Study study = createStudy("test", account);
+
+        Account ghsong = accountRepository.findByNickname("ghsong");
+        studyService.addMember(study, ghsong);
+
+        mockMvc.perform(get("/study/" + study.getPath() + "/leave"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/study/" + study.getPath() + "/members"));
+
+        assertFalse(study.getMembers().contains(ghsong));
+    }
+
+
 }
+
 
