@@ -262,8 +262,8 @@
 <div th:fragment="member-list (members, isManager)" class="row px-3 justify-content-center">
     <ul class="list-unstyled col-10">
         <li class="media mt-3" th:each="member: ${members}">
-            <svg th:if="${#strings.isEmpty(member?.profileImage)}" th:data-jdenticon-value="${member.nickname}" width="64" height="64" class="rounded border bg-light mr-3"></svg>
             <img th:if="${!#strings.isEmpty(member?.profileImage)}" th:src="${member.profileImage}" width="64" height="64" class="rounded border mr-3"/>
+            <svg th:if="${#strings.isEmpty(member?.profileImage)}" th:data-jdenticon-value="${member.nickname}" width="64" height="64" class="rounded border bg-light mr-3"></svg>
             <div class="media-body">
                 <h5 class="mt-0 mb-1"><span th:text="${member.nickname}"></span><span th:if="${isManager}" class="badge badge-primary">관리자</span></h5>
                 <span th:text="${member.bio}"></span>
@@ -441,6 +441,91 @@
             });
         })
     </script>
+</div>
+
+<!-- 이벤트 폼-->
+<div th:fragment="event-form (mode, action)">
+    <div class="py-5 text-center">
+        <h2><a href="#" th:href="@{'/study/' + ${study.path}}"><span th:text="${study.title}">스터디</span></a> /
+            <span th:if="${mode == 'edit'}" th:text="${event.title}"></span>
+            <span th:if="${mode == 'new'}">새 모임 만들기</span>
+        </h2>
+    </div>
+    <div class="row justify-content-center">
+        <form action="#" class="needs-validation col-sm-10" th:action="@{${action}}" th:object="${eventForm}" method="post" novalidate>
+            <div class="form-group">
+                <label for="title">모임이름</label>
+                <input type="text" class="form-control" id="title" th:field="*{title}" placeholder="모임 이름" aria-describedby="titleHelp" required>
+                <small id="titleHelp" class="form-text text-muted">
+                    모임 이름을 50자 이내로 입력하세요.
+                </small>
+                <small class="invalid-feedback">모임 이름을 입력하세요.</small>
+                <small class="form-text text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Error</small>
+            </div>
+            <div class="form-group" th:if="${mode == 'new'}">
+                <label for="eventType">모집방법</label>
+                <select name="eventType" id="eventType" th:field="*{eventType}" class="custom-select mr-sm-2" aria-describedby="eventTypeHelp">
+                    <option th:value="FCFS">선착순</option>
+                    <option th:value="CONFIRMATIVE">관리자 확인</option>
+                </select>
+                <small id="eventTypeHelp" class="form-text text-muted">
+                    두두가지 모집 방법이 있습니다.<br/>
+                    <strong>선착순</strong>으로 모집하는 경우, 모집 인원 이내의 접수는 자동으로 확정되며, 제한 인원을 넘는 신청은 대기 신청이 되며 이후에 확정된 신청 중에 취소가 발생하면 선착순으로 대기 신청자를 확정 신청자도 변경합니다. 단, 등록 마감일 이후에는 취소해도 확정 여부가 바뀌지 않습니다.<br/>
+                    <strong>확인</strong>으로 모집하는 경우, 모임 및 스터디 관리자가 모임 신청 목록을 조회하고 직접 확정 여부를 정할 수 있습니다. 등록 마감일 이후에는 변경할 수 없습니다.
+                </small>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label for="limitOfEnrollments">모집인원</label>
+                    <input type="number" class="form-control" id="limitOfEnrollments" th:field="*{limitOfEnrollments}" placeholder="1" aria-describedby="limitOfEnrollmentsHelp" required>
+                    <small id="limitOfEnrollmentsHelp" class="form-text text-muted">
+                        최대 수용 가능한 모임 참석 인원을 설정하세요. 최소 2인 이상 모임이어야 합니다.
+                    </small>
+                    <small class="invalid-feedback">모임 인원을 입력하세요.</small>
+                    <small class="form-text text-danger" th:if="${#fields.hasErrors('limitOfEnrollments')}" th:errors="*{limitOfEnrollments}">Error</small>
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="endEnrollmentDateTime">등록 마감 일시</label>
+                    <input type="datetime-local" class="form-control" id="endEnrollmentDateTime" th:field="*{endEnrollmentDateTime}" placeholder="1" aria-describedby="endEnrollmentDateTimeHelp" required>
+                    <small id="endEnrollmentDateTimeHelp" class="form-text text-muted">
+                        등록 마감 이전에만 스터디 모임 참가 신청을 할 수 있습니다.
+                    </small>
+                    <small class="invalid-feedback">등록 마감 일시를 입력하세요.</small>
+                    <small class="form-text text-danger" th:if="${#fields.hasErrors('endEnrollmentDateTime')}" th:errors="*{endEnrollmentDateTime}">Error</small>
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="startDateTime">모임 시작 일시</label>
+                    <input type="datetime-local" class="form-control" id="startDateTime" th:field="*{startDateTime}" placeholder="1" aria-describedby="startDateTimeHelp" required>
+                    <small id="startDateTimeHelp" class="form-text text-muted">
+                        모임 시작 일시를 입력해주세요. 상세한 모임 일정은 본문에 적어주세요.
+                    </small>
+                    <small class="invalid-feedback">모임 시작 일시를 입력하세요.</small>
+                    <small class="form-text text-danger" th:if="${#fields.hasErrors('limitOfEnrollments')}" th:errors="*{limitOfEnrollments}">Error</small>
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="endDateTime">모임 종료 일시</label>
+                    <input type="datetime-local" class="form-control" id="endDateTime" th:field="*{endDateTime}" placeholder="1" aria-describedby="endDateTimeHelp" required>
+                    <small id="endDateTimeHelp" class="form-text text-muted">
+                        모임 종료 일시가 지나면 모임은 자동으로 종료 상태로 바뀝니다.
+                    </small>
+                    <small class="invalid-feedback">모임 종료 일시를 입력하세요.</small>
+                    <small class="form-text text-danger" th:if="${#fields.hasErrors('endDateTime')}" th:errors="*{endDateTime}">Error</small>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="eventType">모집 설명</label>
+                <textarea name="description" id="description" type="textarea" th:field="*{description}" class="form-control editor" placeholder="모임을 자세히 설명해주세요." aria-describedby="descriptionHelp" required></textarea>
+                <small id="descriptionHelp" class="form-text text-muted">
+                    모임에서 다루는 주제, 장소, 진행 방식 등을 자세히 적어주세요.
+                </small>
+                <small class="invalid-feedback">모임 설명을 입력하세요.</small>
+                <small class="form-text text-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Error</small>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary btn-block" type="submit" aria-describedby="submitHelp" th:text="${mode == 'edit' ? '모임 수정하기' : '모임 만들기'}">모임 만들기</button>
+            </div>
+        </form>
+    </div>
 </div>
 
 </html>

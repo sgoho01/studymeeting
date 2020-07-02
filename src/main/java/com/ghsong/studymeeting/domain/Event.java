@@ -92,4 +92,8 @@ public class Event {
         return this.limitOfEnrollments - (int) this.enrollments.stream().filter(e -> e.isAttended()).count();
     }
 
+    public int getNumberOfAcceptedEnrollments() {
+        return (int) this.enrollments.stream().filter(Enrollment::isAccepted).count();
+    }
+
 }
