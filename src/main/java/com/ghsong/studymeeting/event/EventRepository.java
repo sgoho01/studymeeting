@@ -1,5 +1,6 @@
 package com.ghsong.studymeeting.event;
 
+import com.ghsong.studymeeting.domain.Account;
 import com.ghsong.studymeeting.domain.Event;
 import com.ghsong.studymeeting.domain.Study;
 import org.springframework.data.jpa.repository.EntityGraph;
