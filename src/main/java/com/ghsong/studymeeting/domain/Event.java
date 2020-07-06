@@ -59,11 +59,11 @@ public class Event {
 
 
     public boolean isEnrollableFor(UserAccount userAccount) {
-        return isNotClose() && !isAlreadyEnrolled(userAccount);
+        return isNotClose() && !isAttended(userAccount) && !isAlreadyEnrolled(userAccount);
     }
 
     public boolean isDisenrollableFor(UserAccount userAccount) {
-        return isNotClose() && isAlreadyEnrolled(userAccount);
+        return isNotClose() && !isAttended(userAccount) && isAlreadyEnrolled(userAccount);
     }
 
     private boolean isAlreadyEnrolled(UserAccount userAccount) {
@@ -155,5 +155,26 @@ public class Event {
 
     private List<Enrollment> getWaitingList() {
         return this.enrollments.stream().filter(enrollment -> !enrollment.isAccepted()).collect(Collectors.toList());
+    }
+
+    public void accept(Enrollment enrollment) {
+        if (this.eventType == EventType.CONFIRMATIVE
+                && this.limitOfEnrollments > this.getNumberOfAcceptedEnrollments()) {
+            enrollment.setAccepted(true);
+        }
+    }
+
+    public void reject(Enrollment enrollment) {
+        if (this.eventType == EventType.CONFIRMATIVE) {
+            enrollment.setAccepted(false);
+        }
+    }
+
+    public void checkin(Enrollment enrollment) {
+        enrollment.setAttended(true);
+    }
+
+    public void cancelCheckin(Enrollment enrollment) {
+        enrollment.setAttended(false);
     }
 }
