@@ -1,5 +1,6 @@
 package com.ghsong.studymeeting.modules.account;
 
+import com.ghsong.studymeeting.infra.MockMvcTest;
 import com.ghsong.studymeeting.infra.mail.EmailMessage;
 import com.ghsong.studymeeting.infra.mail.EmailService;
 import org.junit.jupiter.api.DisplayName;
@@ -28,9 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Date: 2020-04-04
  * Copyright(©) 2020
  */
-@Transactional
-@SpringBootTest
-@AutoConfigureMockMvc
+@MockMvcTest
 class AccountControllerTest {
 
     @Autowired

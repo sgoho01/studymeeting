@@ -1,5 +1,7 @@
 package com.ghsong.studymeeting.modules.study;
 
+import com.ghsong.studymeeting.infra.MockMvcTest;
+import com.ghsong.studymeeting.modules.account.AccountFactory;
 import com.ghsong.studymeeting.modules.account.WithAccount;
 import com.ghsong.studymeeting.modules.account.AccountRepository;
 import com.ghsong.studymeeting.modules.account.Account;
@@ -20,20 +22,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
-@Transactional
-@SpringBootTest
-@AutoConfigureMockMvc
+@MockMvcTest
 public class StudyControllerTest {
 
-    @Autowired
-    public MockMvc mockMvc;
-    @Autowired
-    public StudyService studyService;
-    @Autowired
-    public StudyRepository studyRepository;
-    @Autowired
-    public AccountRepository accountRepository;
-
+    @Autowired MockMvc mockMvc;
+    @Autowired StudyService studyService;
+    @Autowired StudyRepository studyRepository;
+    @Autowired AccountRepository accountRepository;
+    @Autowired AccountFactory accountFactory;
+    @Autowired StudyFactory studyFactory;
 
     @AfterEach
     void afterEach() {
@@ -95,8 +92,8 @@ public class StudyControllerTest {
     @Test
     @DisplayName("스터디 조회")
     public void view_study() throws Exception {
-        Account account = createAccount("song6497");
-        Study study = createStudy("test", account);
+        Account account = accountFactory.createAccount("song6497");
+        Study study = studyFactory.createStudy("test", account);
 
         mockMvc.perform(get("/study/test"))
                 .andExpect(status().isOk())
@@ -109,8 +106,8 @@ public class StudyControllerTest {
     @Test
     @DisplayName("스터디 맴버 조회")
     public void view_study_member() throws Exception {
-        Account account = createAccount("song6497");
-        Study study = createStudy("test", account);
+        Account account = accountFactory.createAccount("song6497");
+        Study study = studyFactory.createStudy("test", account);
 
         mockMvc.perform(get("/study/test/members"))
                 .andExpect(status().isOk())
@@ -119,28 +116,12 @@ public class StudyControllerTest {
                 .andExpect(model().attributeExists("account"));
     }
 
-    protected Study createStudy(String path, Account account) {
-        Study study = new Study();
-        study.setPath(path);
-        Study newStudy= studyService.createNewStudy(study, account);
-        return newStudy;
-    }
-
-    protected Account createAccount(String nickname) {
-        Account account = new Account();
-        account.setNickname(nickname);
-        account.setEmail(nickname + "@gmail.com");
-        account.setPassword("12345678");
-        Account newAccount = accountRepository.save(account);
-        return newAccount;
-    }
-
     @WithAccount("ghsong")
     @Test
     @DisplayName("스터디 가입")
     public void join_study() throws Exception {
-        Account account = createAccount("song6497");
-        Study study = createStudy("test", account);
+        Account account = accountFactory.createAccount("song6497");
+        Study study = studyFactory.createStudy("test", account);
 
         mockMvc.perform(get("/study/" + study.getPath() + "/join"))
                 .andExpect(status().is3xxRedirection())
@@ -155,8 +136,8 @@ public class StudyControllerTest {
     @Test
     @DisplayName("스터디 탈퇴")
     public void leave_study() throws Exception {
-        Account account = createAccount("song6497");
-        Study study = createStudy("test", account);
+        Account account = accountFactory.createAccount("song6497");
+        Study study = studyFactory.createStudy("test", account);
 
         Account ghsong = accountRepository.findByNickname("ghsong");
         studyService.addMember(study, ghsong);

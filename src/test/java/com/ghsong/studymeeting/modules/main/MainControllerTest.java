@@ -1,5 +1,6 @@
 package com.ghsong.studymeeting.modules.main;
 
+import com.ghsong.studymeeting.infra.MockMvcTest;
 import com.ghsong.studymeeting.modules.account.AccountRepository;
 import com.ghsong.studymeeting.modules.account.AccountService;
 import com.ghsong.studymeeting.modules.account.form.SignUpForm;
@@ -26,8 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Date: 2020-04-13
  * Copyright(©) 2020
  */
-@SpringBootTest
-@AutoConfigureMockMvc
+@MockMvcTest
 class MainControllerTest {
 
     @Autowired

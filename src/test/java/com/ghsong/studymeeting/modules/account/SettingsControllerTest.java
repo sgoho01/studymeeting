@@ -1,6 +1,7 @@
 package com.ghsong.studymeeting.modules.account;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ghsong.studymeeting.infra.MockMvcTest;
 import com.ghsong.studymeeting.modules.tag.Tag;
 import com.ghsong.studymeeting.modules.zone.Zone;
 import com.ghsong.studymeeting.modules.tag.form.TagForm;
@@ -31,9 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Date: 2020-04-14
  * Copyright(©) 2020
  */
-@Transactional
-@SpringBootTest
-@AutoConfigureMockMvc
+@MockMvcTest
 class SettingsControllerTest {
 
     @Autowired

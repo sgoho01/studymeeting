@@ -1,13 +1,18 @@
 package com.ghsong.studymeeting.modules.event;
 
 
+import com.ghsong.studymeeting.infra.MockMvcTest;
+import com.ghsong.studymeeting.modules.account.AccountFactory;
+import com.ghsong.studymeeting.modules.account.AccountRepository;
 import com.ghsong.studymeeting.modules.account.WithAccount;
 import com.ghsong.studymeeting.modules.account.Account;
 import com.ghsong.studymeeting.modules.study.Study;
 import com.ghsong.studymeeting.modules.study.StudyControllerTest;
+import com.ghsong.studymeeting.modules.study.StudyFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
 
@@ -17,13 +22,15 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class EventControllerTest extends StudyControllerTest {
+@MockMvcTest
+public class EventControllerTest {
 
-
-    @Autowired
-    EventService eventService;
-    @Autowired
-    EnrollmentRepository enrollmentRepository;
+    @Autowired MockMvc mockMvc;
+    @Autowired EventService eventService;
+    @Autowired EnrollmentRepository enrollmentRepository;
+    @Autowired AccountRepository accountRepository;
+    @Autowired AccountFactory accountFactory;
+    @Autowired StudyFactory studyFactory;
 
     private Event createEvent(String eventTitle, EventType eventType, int limit, Study study, Account account) {
         Event event = new Event();
@@ -51,8 +58,8 @@ public class EventControllerTest extends StudyControllerTest {
     @WithAccount("song6497")
     @DisplayName("선착순 모임에 참가 신청 - 자동 수락")
     void newEnrollment_FCFS_accept() throws Exception {
-        Account ghsong = createAccount("ghsong");
-        Study study = createStudy("test-study", ghsong);
+        Account ghsong = accountFactory.createAccount("ghsong");
+        Study study = studyFactory.createStudy("test-study", ghsong);
         Event event = createEvent("test-event", EventType.FCFS, 2, study, ghsong);
 
         mockMvc.perform(post("/study/" + study.getEncodePath() + "/events/" + event.getId() + "/enroll")
@@ -69,12 +76,12 @@ public class EventControllerTest extends StudyControllerTest {
     @WithAccount("song6497")
     @DisplayName("선착순 모임에 참가 신청 - 대기중 (이미 인원이 꽉차서)")
     void newEnrollment_FCFS_not_accept() throws Exception {
-        Account ghsong = createAccount("ghsong");
-        Study study = createStudy("test-study", ghsong);
+        Account ghsong = accountFactory.createAccount("ghsong");
+        Study study = studyFactory.createStudy("test-study", ghsong);
         Event event = createEvent("test-event", EventType.FCFS, 2, study, ghsong);
 
-        Account jun = createAccount("jun");
-        Account jin = createAccount("jin");
+        Account jun = accountFactory.createAccount("jun");
+        Account jin = accountFactory.createAccount("jin");
 
         eventService.newEnrollment(event, jun);
         eventService.newEnrollment(event, jin);
@@ -97,8 +104,8 @@ public class EventControllerTest extends StudyControllerTest {
     @DisplayName("선착순 모임에 참가 신청 - 취소")
     void cancelEnrollment_FCFS() throws Exception {
         Account song = accountRepository.findByNickname("song6497");
-        Account ghsong = createAccount("ghsong");
-        Study study = createStudy("test-study", ghsong);
+        Account ghsong = accountFactory.createAccount("ghsong");
+        Study study = studyFactory.createStudy("test-study", ghsong);
         Event event = createEvent("test-event", EventType.FCFS, 2, study, ghsong);
 
         eventService.newEnrollment(event, song);
@@ -117,12 +124,12 @@ public class EventControllerTest extends StudyControllerTest {
     @WithAccount("song6497")
     @DisplayName("선착순 모임에 참가 신청 - 대기중")
     void newEnrollment_FCFS_wait_accept() throws Exception {
-        Account ghsong = createAccount("ghsong");
-        Study study = createStudy("test-study", ghsong);
+        Account ghsong = accountFactory.createAccount("ghsong");
+        Study study = studyFactory.createStudy("test-study", ghsong);
         Event event = createEvent("test-event", EventType.FCFS, 2, study, ghsong);
 
-        Account jun = createAccount("jun");
-        Account jin = createAccount("jin");
+        Account jun = accountFactory.createAccount("jun");
+        Account jin = accountFactory.createAccount("jin");
 
         eventService.newEnrollment(event, jun);
         eventService.newEnrollment(event, jin);
