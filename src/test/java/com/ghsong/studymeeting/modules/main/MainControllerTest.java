@@ -1,5 +1,6 @@
 package com.ghsong.studymeeting.modules.main;
 
+import com.ghsong.studymeeting.infra.AbstractContainerBaseTest;
 import com.ghsong.studymeeting.infra.MockMvcTest;
 import com.ghsong.studymeeting.modules.account.AccountRepository;
 import com.ghsong.studymeeting.modules.account.AccountService;
@@ -28,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Copyright(©) 2020
  */
 @MockMvcTest
-class MainControllerTest {
+class MainControllerTest extends AbstractContainerBaseTest {
 
     @Autowired
     MockMvc mockMvc;

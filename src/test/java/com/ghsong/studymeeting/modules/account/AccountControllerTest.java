@@ -1,5 +1,6 @@
 package com.ghsong.studymeeting.modules.account;
 
+import com.ghsong.studymeeting.infra.AbstractContainerBaseTest;
 import com.ghsong.studymeeting.infra.MockMvcTest;
 import com.ghsong.studymeeting.infra.mail.EmailMessage;
 import com.ghsong.studymeeting.infra.mail.EmailService;
@@ -30,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Copyright(©) 2020
  */
 @MockMvcTest
-class AccountControllerTest {
+class AccountControllerTest extends AbstractContainerBaseTest {
 
     @Autowired
     private MockMvc mockMvc;

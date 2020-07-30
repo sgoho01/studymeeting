@@ -1,6 +1,7 @@
 package com.ghsong.studymeeting.modules.account;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ghsong.studymeeting.infra.AbstractContainerBaseTest;
 import com.ghsong.studymeeting.infra.MockMvcTest;
 import com.ghsong.studymeeting.modules.tag.Tag;
 import com.ghsong.studymeeting.modules.zone.Zone;
@@ -33,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Copyright(©) 2020
  */
 @MockMvcTest
-class SettingsControllerTest {
+class SettingsControllerTest extends AbstractContainerBaseTest {
 
     @Autowired
     MockMvc mockMvc;

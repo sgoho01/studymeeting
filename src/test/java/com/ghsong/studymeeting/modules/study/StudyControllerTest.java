@@ -1,5 +1,6 @@
 package com.ghsong.studymeeting.modules.study;
 
+import com.ghsong.studymeeting.infra.AbstractContainerBaseTest;
 import com.ghsong.studymeeting.infra.MockMvcTest;
 import com.ghsong.studymeeting.modules.account.AccountFactory;
 import com.ghsong.studymeeting.modules.account.WithAccount;
@@ -23,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @MockMvcTest
-public class StudyControllerTest {
+public class StudyControllerTest extends AbstractContainerBaseTest {
 
     @Autowired MockMvc mockMvc;
     @Autowired StudyService studyService;

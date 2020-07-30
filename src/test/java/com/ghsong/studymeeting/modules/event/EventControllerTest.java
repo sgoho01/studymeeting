@@ -1,6 +1,7 @@
 package com.ghsong.studymeeting.modules.event;
 
 
+import com.ghsong.studymeeting.infra.AbstractContainerBaseTest;
 import com.ghsong.studymeeting.infra.MockMvcTest;
 import com.ghsong.studymeeting.modules.account.AccountFactory;
 import com.ghsong.studymeeting.modules.account.AccountRepository;
@@ -23,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @MockMvcTest
-public class EventControllerTest {
+public class EventControllerTest extends AbstractContainerBaseTest {
 
     @Autowired MockMvc mockMvc;
     @Autowired EventService eventService;
