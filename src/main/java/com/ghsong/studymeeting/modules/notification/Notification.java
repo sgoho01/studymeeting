@@ -1,4 +1,4 @@
-package com.ghsong.studymeeting.modules.account.notification;
+package com.ghsong.studymeeting.modules.notification;
 
 import com.ghsong.studymeeting.modules.account.Account;
 import lombok.EqualsAndHashCode;

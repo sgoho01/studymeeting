@@ -1,4 +1,4 @@
-package com.ghsong.studymeeting.modules.account.notification;
+package com.ghsong.studymeeting.modules.notification;
 
 public enum NotificationType {
 
