@@ -67,7 +67,7 @@ public class StudyEventListener {
 
     protected void sendStudyCreatedEmail(Study study, Account account) {
         Context context = new Context();
-        context.setVariable("name", account.getNickname());
+        context.setVariable("nickname", account.getNickname());
         context.setVariable("link", "/study/" + study.getEncodePath());
         context.setVariable("linkName", study.getTitle());
         context.setVariable("message", "새로운 스터디가 생겼습니다.");
