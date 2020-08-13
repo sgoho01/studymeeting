@@ -1,10 +1,14 @@
 package com.ghsong.studymeeting.modules.event;
 
 import com.ghsong.studymeeting.modules.account.Account;
+import com.ghsong.studymeeting.modules.event.event.EnrollmentAcceptedEvent;
+import com.ghsong.studymeeting.modules.event.event.EnrollmentRejectedEvent;
 import com.ghsong.studymeeting.modules.study.Study;
 import com.ghsong.studymeeting.modules.event.form.EventForm;
+import com.ghsong.studymeeting.modules.study.event.StudyUpdateEvent;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,22 +22,25 @@ public class EventService {
     private final EventRepository eventRepository;
     private final ModelMapper modelMapper;
     private final EnrollmentRepository enrollmentRepository;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     public Event createEvent(Event event, Study study, Account account) {
         event.setCreatedBy(account);
         event.setCreatedDateTime(LocalDateTime.now());
         event.setStudy(study);
+        applicationEventPublisher.publishEvent(new StudyUpdateEvent(study, "모임을 만들었습니다."));
         return eventRepository.save(event);
     }
 
     public void updateEvent(Event event, EventForm eventForm) {
         modelMapper.map(eventForm, event);
-        // TODO 모집 인원을 늘린 선착순 모임의 경우에, 자동으로 추가 인원의 참가 신청을 확정 상태로 변경해야 한다.
         event.acceptWaitingList();
+        applicationEventPublisher.publishEvent(new StudyUpdateEvent(event.getStudy(), "모임 정보가 수정되었습니다."));
     }
 
     public void deleteEvent(Event event) {
         eventRepository.delete(event);
+        applicationEventPublisher.publishEvent(new StudyUpdateEvent(event.getStudy(), "모임이 취소되었습니다."));
     }
 
     public void newEnrollment(Event event, Account account) {
@@ -58,10 +65,12 @@ public class EventService {
 
     public void acceptEnrollment(Event event, Enrollment enrollment) {
         event.accept(enrollment);
+        applicationEventPublisher.publishEvent(new EnrollmentAcceptedEvent(enrollment));
     }
 
     public void reject(Event event, Enrollment enrollment) {
         event.reject(enrollment);
+        applicationEventPublisher.publishEvent(new EnrollmentRejectedEvent(enrollment));
     }
 
     public void checkin(Event event, Enrollment enrollment) {
