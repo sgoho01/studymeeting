@@ -23,7 +23,7 @@ public class NotificationController {
     public String getNotifications(@CurrentUser Account account, Model model) {
         List<Notification> notifications = notificationRepository.findByAccountAndCheckedOrderByCreatedDateTimeDesc(account, false);
         Long numberOfChecked = notificationRepository.countByAccountAndChecked(account, true);
-        putCategorizedNotifications(model, notifications, numberOfChecked);
+        putCategorizedNotifications(model, notifications, numberOfChecked, notifications.size());
         model.addAttribute("isNew", true);
         notificationService.markAsRead(notifications);
         return "notification/list";
@@ -32,8 +32,8 @@ public class NotificationController {
     @GetMapping("/notifications/old")
     public String getOldNotifications(@CurrentUser Account account, Model model) {
         List<Notification> notifications = notificationRepository.findByAccountAndCheckedOrderByCreatedDateTimeDesc(account, true);
-        Long numberOfChecked = notificationRepository.countByAccountAndChecked(account, false);
-        putCategorizedNotifications(model, notifications, numberOfChecked);
+        Long numberOfNotChecked = notificationRepository.countByAccountAndChecked(account, false);
+        putCategorizedNotifications(model, notifications, notifications.size(), numberOfNotChecked );
         model.addAttribute("isNew", false);
         notificationService.markAsRead(notifications);
         return "notification/list";
@@ -45,7 +45,7 @@ public class NotificationController {
         return "redirect:/notifications";
     }
 
-    private void putCategorizedNotifications(Model model, List<Notification> notifications, Long numberOfChecked) {
+    private void putCategorizedNotifications(Model model, List<Notification> notifications, long numberOfChecked, long numberOfNotChecked) {
 
         List<Notification> newStudyNotifications = new ArrayList<>();
         List<Notification> eventEnrollmentNotifications = new ArrayList<>();
@@ -59,7 +59,7 @@ public class NotificationController {
             }
         }
 
-        model.addAttribute("numberOfNotChecked", notifications.size());
+        model.addAttribute("numberOfNotChecked", numberOfNotChecked);
         model.addAttribute("numberOfChecked", numberOfChecked);
         model.addAttribute("notifications", notifications);
         model.addAttribute("newStudyNotifications", newStudyNotifications);
