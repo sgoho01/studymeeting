@@ -2,6 +2,7 @@ package com.ghsong.studymeeting.modules.study;
 
 import com.ghsong.studymeeting.modules.account.Account;
 import com.ghsong.studymeeting.modules.study.event.StudyCreatedEvent;
+import com.ghsong.studymeeting.modules.study.event.StudyUpdateEvent;
 import com.ghsong.studymeeting.modules.tag.Tag;
 import com.ghsong.studymeeting.modules.zone.Zone;
 import com.ghsong.studymeeting.modules.study.form.StudyDescriptionForm;
@@ -78,8 +79,9 @@ public class StudyService {
         }
     }
 
-    public void updaetStudyDescription(Study study, StudyDescriptionForm studyDescriptionForm) {
+    public void updateStudyDescription(Study study, StudyDescriptionForm studyDescriptionForm) {
         modelMapper.map(studyDescriptionForm, study);
+        applicationEventPublisher.publishEvent(new StudyUpdateEvent(study, "스터디 소개를 수정했습니다."));
     }
 
     public void enableStudyBanner(Study study) {
@@ -117,14 +119,17 @@ public class StudyService {
 
     public void closeStudy(Study study) {
         study.close();
+        applicationEventPublisher.publishEvent(new StudyUpdateEvent(study, "스터디를 종료했습니다.."));
     }
 
     public void startRecruit(Study study) {
         study.startRecruit();
+        applicationEventPublisher.publishEvent(new StudyUpdateEvent(study, "스터디 인원모집을 시작했습니다."));
     }
 
     public void stopRecruit(Study study) {
         study.stopRecruit();
+        applicationEventPublisher.publishEvent(new StudyUpdateEvent(study, "스터디 인원모집을 종료했습니다."));
     }
 
 

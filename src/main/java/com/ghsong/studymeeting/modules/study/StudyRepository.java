@@ -13,20 +13,26 @@ import org.springframework.transaction.annotation.Transactional;
 public interface StudyRepository extends JpaRepository<Study, Long> {
     boolean existsByPath(String path);
 
-    @EntityGraph(value = "Study.withAll", type = EntityGraph.EntityGraphType.LOAD)
+    @EntityGraph(attributePaths = {"members","managers","tags","zones"}, type = EntityGraph.EntityGraphType.LOAD)
     Study findByPath(String path);
 
-    @EntityGraph(value = "Study.withTagsAndManager", type = EntityGraph.EntityGraphType.FETCH)
+    @EntityGraph(attributePaths = {"tags","managers"})
     Study findStudyWithTagsByPath(String path);
 
-    @EntityGraph(value = "Study.withZonesAndManager", type = EntityGraph.EntityGraphType.FETCH)
+    @EntityGraph(attributePaths = {"zones", "managers"})
     Study findStudyWithZonesByPath(String path);
 
-    @EntityGraph(value = "Study.withManager", type = EntityGraph.EntityGraphType.FETCH)
+    @EntityGraph(attributePaths = "managers")
     Study findStudyWithManagerByPath(String path);
+
+    @EntityGraph(attributePaths = "members")
+    Study findStudyWithMemberByPath(String path);
 
     Study findStudyOnlyBypath(String path);
 
-    @EntityGraph(value = "Study.withTagsAndZones", type = EntityGraph.EntityGraphType.FETCH)
+    @EntityGraph(attributePaths = {"zones", "tags"})
     Study findStudyWithTagsAndZonesById(Long id);
+
+    @EntityGraph(attributePaths = {"members", "managers"})
+    Study findStudyWithManagersAndMembersById(Long id);
 }

@@ -66,7 +66,7 @@ public class StudySettingsController {
             return "study/settings/description";
         }
 
-        studyService.updaetStudyDescription(study, studyDescriptionForm);
+        studyService.updateStudyDescription(study, studyDescriptionForm);
         redirectAttributes.addFlashAttribute("message", "스터디 소개를 수정했습니다.");
         return "redirect:/study/" + study.getEncodePath() + "/settings/description";
     }

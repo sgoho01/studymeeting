@@ -18,22 +18,6 @@ import java.util.Set;
  * Date: 2020-05-17
  * Copyright(©) 2020
  */
-@NamedEntityGraph(name = "Study.withAll", attributeNodes = {
-        @NamedAttributeNode("tags"),
-        @NamedAttributeNode("zones"),
-        @NamedAttributeNode("members"),
-        @NamedAttributeNode("managers")})
-@NamedEntityGraph(name = "Study.withTagsAndManager", attributeNodes = {
-        @NamedAttributeNode("tags"),
-        @NamedAttributeNode("managers")})
-@NamedEntityGraph(name = "Study.withZonesAndManager", attributeNodes = {
-        @NamedAttributeNode("zones"),
-        @NamedAttributeNode("managers")})
-@NamedEntityGraph(name = "Study.withManager", attributeNodes = {
-        @NamedAttributeNode("managers")})
-@NamedEntityGraph(name = "Study.withTagsAndZones", attributeNodes = {
-        @NamedAttributeNode("tags"),
-        @NamedAttributeNode("zones")})
 @Entity
 @Getter
 @Setter
