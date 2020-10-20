@@ -4,15 +4,20 @@ import com.ghsong.studymeeting.modules.account.Account;
 import com.ghsong.studymeeting.modules.study.event.StudyCreatedEvent;
 import com.ghsong.studymeeting.modules.study.event.StudyUpdateEvent;
 import com.ghsong.studymeeting.modules.tag.Tag;
+import com.ghsong.studymeeting.modules.tag.TagRepository;
 import com.ghsong.studymeeting.modules.zone.Zone;
 import com.ghsong.studymeeting.modules.study.form.StudyDescriptionForm;
 import com.ghsong.studymeeting.modules.study.form.StudyForm;
 import lombok.RequiredArgsConstructor;
+import net.bytebuddy.utility.RandomString;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.HashSet;
+import java.util.Optional;
 
 /**
  * @author : song6
@@ -27,6 +32,8 @@ public class StudyService {
     private final StudyRepository studyRepository;
     private final ModelMapper modelMapper;
     private final ApplicationEventPublisher applicationEventPublisher;
+
+    private final TagRepository tagRepository;
 
     public Study createNewStudy(Study study, Account account) {
         Study newStudy = studyRepository.save(study);
