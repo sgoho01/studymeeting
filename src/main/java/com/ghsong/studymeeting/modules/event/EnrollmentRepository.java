@@ -1,8 +1,11 @@
 package com.ghsong.studymeeting.modules.event;
 
 import com.ghsong.studymeeting.modules.account.Account;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Transactional(readOnly = true)
 public interface EnrollmentRepository extends JpaRepository<Enrollment, Long> {
@@ -11,4 +14,6 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment, Long> {
 
     Enrollment findByEventAndAccount(Event event, Account account);
 
+    @EntityGraph("Enrollment.withEventAndStudy")
+    List<Enrollment> findByAccountAndAcceptedOrderByEnrolledAtDesc(Account account, boolean accepted);
 }
